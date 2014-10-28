@@ -7,26 +7,26 @@ THIS MODULE IS UNDER CONSTRUCTION -- NOT READY YET -- DO NOT DOWNLOAD YET -- . C
 In the meantime you can look at the following link -> http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/ 
 
 
-Latest Version -> beta v0.0.1
---------------
+###Latest Version -> beta v0.0.1
 
+-----------------------------------------------------------------------------------------
 
-
-Description and Usage
----------------------
+##Description and Usage
 This is a resuable AngularJS module to help integrate popup browser windows to your application 
 
-It contains two files :
-- windowsPopup.js       --> Contains the main 'windowsPopup' AngularJS module code.
-- windowsPopupConfig.js --> Contains the configuration values for 'windowsPopup' module.
-
-You can and should modify 'windowsPopupConfig.js' file if you want to change the default values or if you want to add pre-defined windows parameters.
-
-You should not modify 'windowsPopup.js' file at all.  
-
-Dependencies :
-...
+####Dependencies :
 - jquery.js
 - angular.js
 - bootstrap.js
+
+####The module defined in two files :
+- windowsPopup.js       --> Contains the main **'windowsPopup'** AngularJS module code.
+- windowsPopupConfig.js --> Contains the configuration values for 'windowsPopup' module.
+
+You can and should modify **'windowsPopupConfig.js'** file if you want to change the default values or if you want to add pre-defined windows parameters.
+
+You should not modify **'windowsPopup.js'** file at all.  
+
+
+
 
