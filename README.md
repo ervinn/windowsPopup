@@ -73,19 +73,19 @@ If you want to override the default values, just specify the new values in the *
 You do the pre-configuration in the '**WindowsPopupConfig.js**' file, where the '**windowsPopupConfig**' module is defined.
 
 There are three levels where you can configure the needed parameters for a popup window :
-- 1st level - **defualt window parameter values**. Used if no value is spefified on the two other level.
-- 2nd level - **pre-defined window values**, that can be access by window name. This value can be overwritten by the next level.
+- 1st level - **defualt window parameter values**. Used if no value is spefified on the two other levels.
+- 2nd level - **pre-defined window values**, that can be access by window name. These values can be overwritten by the next level.
 - 3rd level - **attribute values** specified on the ``` <win-pop width="500" height="500" ... /> ``` directive as attributes.
  
-The first two levels are defined in the '**WindowsPopupConfig.js**' file. The 3rd level is defined in your HTML file.
+The first two level values are defined in the '**WindowsPopupConfig.js**' file. The 3rd level values are defined in your HTML file.
 
 The lowest level values can be modified by changing the ``` var defaultWinValues ``` object values.
 Those values will be used only if, no values are specified in you predefined window variable, or there is no attribute value in the **'win-pop'** directive.
 
-The second level is in your predifined window variable specified in the '**WindowsPopupConfig.js**' file. There are two pre-defined variables are already defined. Those are ``` var preDefineWindowOne ``` and ``` var preDefineWindowTwo ```.
-Feel free to modify any of the values. Modify only the values. If you are a javaScript developer, it is obvious what you can and can not be modified. 
+The second level values are in your predifined window variable specified in the '**WindowsPopupConfig.js**' file. There are two pre-defined variables are already defined. Those are ``` var preDefineWindowOne ``` and ``` var preDefineWindowTwo ```.
+Feel free to modify any of the values. Modify only the values. If you are a javaScript developer, it is obvious what you can and can not modify. 
 
-Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. _NOTE_: the key in the JavaScript object is the window name, that is the name attribute you specify in the ```<win-pop name="..." /> ``` directives.
+Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. _NOTE_: the key in the JavaScript object is the window name, that is the name attribute you specify in the ```<win-pop name="..." /> ``` directives, to refernce the values.
 
 _NOTE_: other additional config values that will be added in the future will follow these three level logic configuration.
 
