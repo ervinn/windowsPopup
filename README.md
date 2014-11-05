@@ -21,11 +21,41 @@ This is a resuable AngularJS module to help integrate popup browser windows to y
 
 ####The module defined in two files :
 - windowsPopup.js       --> Contains the main **'windowsPopup'** AngularJS module code.
-- windowsPopupConfig.js --> Contains the configuration values for 'windowsPopup' module.
+- windowsPopupConfig.js --> Contains the configuration values for **'windowsPopup'** module.
 
 You can and should modify **'windowsPopupConfig.js'** file if you want to change the default values or if you want to add pre-defined windows parameters.
 
-You should not modify **'windowsPopup.js'** file at all.  
+You should not modify **'windowsPopup.js'**.  
+
+####How to use it?
+###### Download :
+You can download the two needed .js files form Github. Search for windowsPopup reposatory.
+Or for testing you can point to the two links below:
+- http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/windowsPopup.js
+- http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/windowsPopupConfig.js
+Note : do not use the above two links for production applications, the availability and performance of that server is not garanteed. 
+
+###### Description :
+One page applications developed by AngularJS is starting to look like a normal GU desktop application. However in a desktop application usually you need to open secondary windows to change some properties, or do some changes related the application running.  Unfortunatelly, opening secondary, child windows in javaScripts are not traitforward. Additional to it the communication between the main application window and popup windows are not standard. There are diffwerent sulotions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object if the 'window.open()' method. So you can do this:
+
+var childWin = window.open( .... );
+childWin.sharedData = <some data>
+
+In IE, however, it does not work. In IE, the child need to get the 'sharedData', using the 'window.opener' .
+In IE the parent would do:
+
+window.sharedData = <some data>
+var childWin = window.open( .... );
+
+The child would get it from :
+
+var shareddata = window.opener.shareddata;
+
+
+
+
+
+
 
 
 
