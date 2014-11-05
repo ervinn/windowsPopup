@@ -41,14 +41,14 @@ One page applications developed by AngularJS is starting to look like a normal G
 
 Unfortunately, opening secondary, child windows in javaScripts are not traitforward.
 Each window has its own main ***window***, ***document***, object, and data can not be easily accessed from one to the other.
-Communication between the main application window and popup windows are not standardised. There are different solutions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object if the 'window.open()' method. So you can do this:
+Communication between the main application window and popup windows are not standardised. There are different solutions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object of the 'window.open()' method. So you can do this:
 
 ```sh
 var childWin = window.open( .... );
 childWin.sharedData = <some data>
 ```
 
-In IE, however, it does not work. In IE, the child need to get the 'sharedData', using the 'window.opener' .
+In IE, however, it does not work. In IE, the child needs to get the 'sharedData', using the 'window.opener' .
 In IE the parent would do:
 
 ```
@@ -61,12 +61,16 @@ The child would get it from :
 var shareddata = window.opener.shareddata;
 ```
 
-This module tries to help AngularJS developers to open secondary windows and communicate between, them. 
+This **windowsPopup** module tries to help AngularJS developers to open secondary windows and communicate between, them. 
 Initially, this module just support child to parent data binding. 
 
-[To see a demo, you can click on this]http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/  
+[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/).  
 
+In this first release, functionality is limited, but the plan is to add more and more as we go along...
 
+In this release we have :
+- win-pop : directive
+- win
 
 
 
