@@ -39,7 +39,7 @@ Note : do not use the above two links for production applications, the availabil
 ###### Description :
 One page applications developed by AngularJS is starting to look like a normal GU desktop application. However in a desktop application usually you need to open secondary windows to change some properties, or do some changes related the application running.  
 
-Unfortunately, opening secondary, child windows in javaScripts are not traitforward.
+Unfortunately, opening secondary, child windows in javaScripts are not straightforward.
 Each window has its own main ***window***, ***document***, object, and data can not be easily accessed from one to the other.
 Communication between the main application window and popup windows are not standardised. There are different solutions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object of the 'window.open()' method. So you can do this:
 
@@ -66,11 +66,44 @@ Initially, this module just support child to parent data binding.
 
 [To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/).  
 
-In this first release, functionality is limited, but the plan is to add more and more as we go along...
+In this first release, functionality is limited, but we plan to add more and more as we go along...
 
 In this release we have :
-- win-pop : directive
-- win
+- ***win-popup*** : directive. Clicking this link will open the secondary window.
+- ***popup-link-model*** : directive. Use this directive to link parent model to child model.- 
+
+The ***win-popup*** directive has all the attributes that are needed to pass on to 'window.open()' method's parameters. Plus is has some additional attributes to configure ***win-popup*** directive.
+
+Those can add up to lot of attributes. To avoid repeating yourself, you can pre-configure a popup window by specifying its parameters, in the '**WindowsPopupConfig.js**' file, and those parameters will be used in the  ***win-pop*** directive . So in your HTML you can popup a window, like so :
+
+```
+<win-pop name="myPredifinedWindow" />
+```
+In this case all the needed parameters are defined in the **windowsPopup** module.
+If you want to override the default values, just specify the new values in the **win-pop** directive as an attribute. Usually you may want to use different URLs to open the same kind of windowm, then you say that like so :
+
+```
+<win-pop name="myPredifinedWindow" url="http://...." />
+```
+
+You do the pre-configuration in the '**WindowsPopupConfig.js**' file.
+
+There are three level of window configurations.
+- defualt window parameter values. Used if no value is spefified on the two other level.
+- pre-defined window values, that can be access by window name. This value can be overwritten by the next level.
+- parameters specified on the ``` <win-pop witdh="500" height="500" ... /> ``` directive as attributes.
+ 
+The lowest level is defined in the '**WindowsPopupConfig.js**' file, by the ``` var defaultWinValues ``` variables.
+Those values will be used only if, no values are specified in you predefined window variable, or there is no attribute value in the **'win-pop'** directive.
+
+The second level is in your predifined window variable specified in the '**WindowsPopupConfig.js**' file. There are two pre-defined variables are already defined. Those are ``` var preDefineWindowOne ''' and ''' var preDefineWindowTwo '''.
+Feel free to modify any of the values. Modify only the values. If you are a javaScript developer, it is obvious what you can and can not be modified. 
+
+Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. Note, the key is the window name, that is the name attribute you specify in the ```<win-pop name="..." /> ``` .
+
+Note: other additional config values that will be added in the future will follow these three level logic configuration.
+
+
 
 
 
