@@ -20,8 +20,8 @@ This is a reusable AngularJS module to help integrate popup browser windows to y
 - bootstrap.js
 
 ####The module defined in two files :
-- windowsPopup.js       --> Contains the main **'windowsPopup'** AngularJS module code.
-- windowsPopupConfig.js --> Contains the configuration values for **'windowsPopup'** module.
+- **windowsPopup.js**       --> Contains the main **'windowsPopup'** AngularJS module code.
+- **windowsPopupConfig.js** --> Contains the configuration values for **'windowsPopup'** module.
 
 You can and should modify **'windowsPopupConfig.js'** file if you want to change the default values or if you want to add pre-defined windows parameters.
 
@@ -63,24 +63,26 @@ Those can add up to lot of attributes. To avoid repeating yourself, you can pre-
 ```
 <win-pop name="myPredifinedWindow" />
 ```
-In this case all the needed parameters are defined in the **windowsPopup** module.
-If you want to override the default values, just specify the new values in the **win-pop** directive as an attribute. Usually you may want to use different URLs to open the same kind of windowm, then you say that like so :
+In this case all the needed parameters are defined in the **windowsPopupConfig** module.
+If you want to override the default values, just specify the new values in the **win-pop** directive as an attribute. Usually you may want to use different URLs to open the same kind of window, then you say that like so :
 
 ```
 <win-pop name="myPredifinedWindow" url="http://...." />
 ```
 
-You do the pre-configuration in the '**WindowsPopupConfig.js**' file.
+You do the pre-configuration in the '**WindowsPopupConfig.js**' file, where the '**windowsPopupConfig**' module is defined.
 
-There are three level of window configurations.
-- 1st level - defualt window parameter values. Used if no value is spefified on the two other level.
-- 2nd level - pre-defined window values, that can be access by window name. This value can be overwritten by the next level.
-- 3rd level - parameters specified on the ``` <win-pop width="500" height="500" ... /> ``` directive as attributes.
+There are three levels where you can configure the needed parameters for a popup window :
+- 1st level - **defualt window parameter values**. Used if no value is spefified on the two other level.
+- 2nd level - **pre-defined window values**, that can be access by window name. This value can be overwritten by the next level.
+- 3rd level - **attribute values** specified on the ``` <win-pop width="500" height="500" ... /> ``` directive as attributes.
  
-The lowest level is defined in the '**WindowsPopupConfig.js**' file, by the ``` var defaultWinValues ``` variables.
+The first two levels are defined in the '**WindowsPopupConfig.js**' file. The 3rd level is defined in your HTML file.
+
+The lowest level values can be modified by changing the ``` var defaultWinValues ``` object values.
 Those values will be used only if, no values are specified in you predefined window variable, or there is no attribute value in the **'win-pop'** directive.
 
-The second level is in your predifined window variable specified in the '**WindowsPopupConfig.js**' file. There are two pre-defined variables are already defined. Those are ``` var preDefineWindowOne ''' and ''' var preDefineWindowTwo '''.
+The second level is in your predifined window variable specified in the '**WindowsPopupConfig.js**' file. There are two pre-defined variables are already defined. Those are ``` var preDefineWindowOne ``` and ``` var preDefineWindowTwo ```.
 Feel free to modify any of the values. Modify only the values. If you are a javaScript developer, it is obvious what you can and can not be modified. 
 
 Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. _NOTE_: the key in the JavaScript object is the window name, that is the name attribute you specify in the ```<win-pop name="..." /> ``` directives.
