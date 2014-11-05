@@ -91,7 +91,7 @@ You do the pre-configuration in the '**WindowsPopupConfig.js**' file.
 There are three level of window configurations.
 - defualt window parameter values. Used if no value is spefified on the two other level.
 - pre-defined window values, that can be access by window name. This value can be overwritten by the next level.
-- parameters specified on the ``` <win-pop witdh="500" height="500" ... /> ``` directive as attributes.
+- parameters specified on the ``` <win-pop width="500" height="500" ... /> ``` directive as attributes.
  
 The lowest level is defined in the '**WindowsPopupConfig.js**' file, by the ``` var defaultWinValues ``` variables.
 Those values will be used only if, no values are specified in you predefined window variable, or there is no attribute value in the **'win-pop'** directive.
