@@ -12,7 +12,7 @@ In the meantime you can look at the following link -> http://www.hardcomsoft.com
 -----------------------------------------------------------------------------------------
 
 ##Description and Usage
-This is a resuable AngularJS module to help integrate popup browser windows to your application 
+This is a reusable AngularJS module to help integrate popup browser windows to your application.
 
 ####Dependencies :
 - jquery.js
@@ -33,16 +33,16 @@ You can download the two needed .js files form Github. Search for windowsPopup r
 Or for testing you can point to the two links below:
 - http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/windowsPopup.js
 - http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/windowsPopupConfig.js
-Note : do not use the above two links for production applications, the availability and performance of that server is not garanteed. 
+Note : do not use the above two links for production applications, the availability and performance of that server is not guaranteed. 
 
 ###### Description :
-One page applications developed by AngularJS is starting to look like a normal GU desktop application. However in a desktop application usually you need to open secondary windows to change some properties, or do some changes related the application running.  Unfortunatelly, opening secondary, child windows in javaScripts are not traitforward. Additional to it the communication between the main application window and popup windows are not standard. There are diffwerent sulotions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object if the 'window.open()' method. So you can do this:
+One page applications developed by AngularJS is starting to look like a normal GU desktop application. However in a desktop application usually you need to open secondary windows to change some properties, or do some changes related the application running.  Unfortunately, opening secondary, child windows in javaScripts are not traitforward. Communication between the main application window and popup windows are not standardised. There are different solutions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object if the 'window.open()' method. So you can do this:
 
-var childWin = window.open( .... );
-childWin.sharedData = <some data>
+ var childWin = window.open( .... );
+ childWin.sharedData = <some data>
 
-In IE, however, it does not work. In IE, the child need to get the 'sharedData', using the 'window.opener' .
-In IE the parent would do:
+ In IE, however, it does not work. In IE, the child need to get the 'sharedData', using the 'window.opener' .
+ In IE the parent would do:
 
 window.sharedData = <some data>
 var childWin = window.open( .... );
@@ -52,7 +52,8 @@ The child would get it from :
 var shareddata = window.opener.shareddata;
 
 
-
+Unfortunatelly, each window has its own main windows, document, object, and data can not be easily accessed from one to the other.
+This module tries to help developers to open secondary windows and communicate between, them. Initially, this module just support child to parent data binding. 
 
 
 
