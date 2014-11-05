@@ -41,25 +41,9 @@ One page applications developed by AngularJS is starting to look like a normal G
 
 Unfortunately, opening secondary, child windows in javaScripts are not straightforward.
 Each window has its own main ***window***, ***document***, object, and data can not be easily accessed from one to the other.
-Communication between the main application window and popup windows are not standardised. There are different solutions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object of the 'window.open()' method. So you can do this:
-
-```sh
-var childWin = window.open( .... );
-childWin.sharedData = <some data>
-```
-
+Communication between the main application window and popup windows are not standardised. There are different solutions for different browsers. For example, in FireFox, the parent has access to the child window, that is the return object of the 'window.open()' method. 
 In IE, however, it does not work. In IE, the child needs to get the 'sharedData', using the 'window.opener' .
-In IE the parent would do:
-
-```
-window.sharedData = <some data>
-var childWin = window.open( .... );
-```
-The child would get it from :
-
-```
-var shareddata = window.opener.shareddata;
-```
+But, all those details are hiden in this module, so hopefully you wont need to worry about them.
 
 This **windowsPopup** module tries to help AngularJS developers to open secondary windows and communicate between, them. 
 Initially, this module just support child to parent data binding. 
