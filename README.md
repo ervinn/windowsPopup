@@ -3,7 +3,8 @@ windowsPopup
 
 Windows Popup AngularJS Module
 
-###Latest Version -> beta v0.0.1 -- 2014-11-05
+###Latest Version -> beta v0.0.1  
+2014-11-05
 
 -----------------------------------------------------------------------------------------
 
