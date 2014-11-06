@@ -48,7 +48,6 @@ angular
             break;
           }           
         } // --- End of loop ---      
-
       }      
     };
 
@@ -71,6 +70,57 @@ angular
         }
       }
       return ret;
+    };
+
+    /**
+     * --- This is called from 'win-pop' directive to apply the default values that is not specified ...
+     */
+    service.fillMissingParams = function(specs, defaultSpecs) {
+        // --- Fill out the missing values from the default window ---
+        if ( ! specs.width )      {  specs.width       = defaultSpecs.width; }
+        if ( ! specs.height )     {  specs.height      = defaultSpecs.height; }
+        if ( ! specs.left )       {  specs.left        = defaultSpecs.left; }
+        if ( ! specs.top )        {  specs.top         = defaultSpecs.top; }
+        if ( ! specs.location )   {  specs.location    = defaultSpecs.location; }
+        if ( ! specs.channelmode ) { specs.channelmode = defaultSpecs.channelmode; }
+        if ( ! specs.fullscreen )  { specs.fullscreen  = defaultSpecs.fullscreen; }
+        if ( ! specs.menubar )     { specs.menubar     = defaultSpecs.menubar; }
+        if ( ! specs.resizable )   { specs.resizable   = defaultSpecs.resizable; }
+        if ( ! specs.scrollbars )  { specs.scrollbars  = defaultSpecs.scrollbars; }
+        if ( ! specs.status )      { specs.status      = defaultSpecs.status; }
+        if ( ! specs.titlebar )    { specs.titlebar    = defaultSpecs.titlebar; }
+        if ( ! specs.toolbar )     { specs.toolbar     = defaultSpecs.toolbar; }
+      return specs;
+    };
+
+    /**
+     * Convert 'specs' params to long text form, as required to pass to 'window.open()' method.
+     * This is called from 'windowsPopup' module.
+     */
+    service.createSpecsParam = function( specs ) {
+      var ret = '';
+      ret += 'width='      + specs.width;
+      ret += ',height='     + specs.height;
+      ret += ',left='       + specs.left;
+      ret += ',top='        + specs.top;
+      ret += ',location='   + specs.location;
+      ret += ',channelmode='+ specs.channelmode;
+      ret += ',fullscreen=' + specs.fullscreen;
+      ret += ',menubar='    + specs.menubar;
+      ret += ',resizable='  + specs.resizable;
+      ret += ',scrollbars=' + specs.scrollbars;
+      ret += ',status='     + specs.status;
+      ret += ',titlebar='   + specs.titlebar;
+      ret += ',toolbar='    + specs.toolbar;
+      return ret;
+    };
+
+    service.notDefined = function( val ) {
+      if ( typeof val === 'undefined' ) {
+        return true;
+      } else {
+        return false;
+      }
     };
 
     return service;
@@ -248,10 +298,10 @@ angular
   /**
    * This is the directive to popup a window with the left mouse click 
    */       
-  .directive('winPopup', ['$window', 'popupService', 'wpopConfig', function ($window, popupService, wpopConfig) {
+  .directive('winPopup', ['$window', 'popupService', 'wpopConfig', 'winPopUtil', function ($window, popupService, wpopConfig, winPopUtil) {
     return {
         restrict: 'E',
-        template : '<span class=""/> <a ng-transclude> </a>',
+        template : '<span class=""/><a ng-transclude></a>',
         replace : false,
         transclude: true,
         link : function (scope, elem, attrs) {
@@ -261,32 +311,48 @@ angular
 
             // --- This will be the 'specs' parameter to the 'window.open()' method ---
             var specs = {};
-            var secondClickclose = attrs.secondClickclose;
+
+            // --- Getting the Attributes ---
+            var url = attrs.url;
+            var secondClickclose = attrs.secondClickClose;
+            specs.width      = attrs.width;
+            specs.height     = attrs.height;
+            specs.left       = attrs.left;
+            specs.top        = attrs.top;
+            specs.location   = attrs.location;
+            specs.channelmode= attrs.channelmode;
+            specs.fullscreen = attrs.fullscreen;
+            specs.menubar    = attrs.menubar;
+            specs.resizable  = attrs.resizable;
+            specs.scrollbars = attrs.scrollbars;
+            specs.status     = attrs.status;
+            specs.titlebar   = attrs.titlebar;
+            specs.toolbar    = attrs.toolbar;
 
             // --- Get the default window spec configuration values from the Config Module ---
             var defaultParams = wpopConfig.getDefaultWindowParams();
             // --- See if the window name is specified ---
             var winName = attrs.name;
-            if ( ! winName ) {
+            if ( winName ) {
               // --- Is this a pre-defined window --
               var preDefWindow = wpopConfig.getPreWindow(winName);
-              if ( ! preDefWindow ) {
+              if ( preDefWindow ) {
                 // --- Use the predefined window values --
-                specs = preDefWindow.specs;
-
-                // --- Fill out the missing values from the default window ---
-                specs = wpopConfig.fillMissingParamsFromDefault(specs, defaultParams.specs);                
+                specs = winPopUtil.fillMissingParams(specs, preDefWindow.specs);
+                if ( winPopUtil.notDefined(url)              ) { url  = preDefWindow.url; }
+                if ( winPopUtil.notDefined(secondClickclose) ) { secondClickclose = preDefWindow.secondClickclose; }                
               }
-
+              // --- Fill out the missing values from the default window ---
+              specs = winPopUtil.fillMissingParams(specs, defaultParams.specs);
             } else {
               // --- Get the default Window name, and its parameters --
               winName = defaultParams.name;
               specs = defaultParams.specs;
             }
-            var specsText = wpopConfig.createSpecsParam( specs );
+            var specsText = winPopUtil.createSpecsParam( specs );
 
-            if ( ! secondClickclose ) { secondClickclose = defaultParams.secondClickclose; }
-
+            if ( winPopUtil.notDefined(url)              ) { url              = defaultParams.url; }
+            if ( winPopUtil.notDefined(secondClickclose) ) { secondClickclose = defaultParams.secondClickclose; }
 
             /**
              * -- Add a click event handler function ---
@@ -294,7 +360,7 @@ angular
             elem.bind('click', function () {
               // --- Call a service to difplay the popup             
               var ret = popupService.popWdwfnc( 
-                                      attrs.url,
+                                      url,
                                       winName,
                                       specsText, 
                                       secondClickclose,
