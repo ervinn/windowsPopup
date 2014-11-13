@@ -39,13 +39,14 @@ angular
       url   : 'views/popupWindow.html',  // -- PROBABLY YOU WANT THIS TO BE DIFFERENT --
       specs : {},
       // --- Additional Configuration values, other than 'specs' --      
-      secondClickclose : 'false'
+      secondClickclose : 'false',
+      autoUpdate: 'true'
     };
     specs = {
       // --- window.open() 'specs' parameters -- 
       width : '500',       // -- width=pixels;  -The width of the window. Min. value is 100
       height: '500',       // -- height=pixels; -The height of the window. Min. value is 100
-      left  : '100',       // -- left=pixels;   -The left position of the window. Negative values not allowed
+      left  : '10',       // -- left=pixels;   -The left position of the window. Negative values not allowed
       top   : '100',       // -- top=pixels;    -The top position of the window. Negative values not allowed
       location : 'no',     // -- location=yes|no|1|0;     -Whether or not to display the address field. Opera only
       channelmode : 'no',  // -- channelmode=yes|no|1|0; -Whether or not to display the window in theater mode. Default is no. IE only
@@ -55,7 +56,7 @@ angular
       scrollbars : 'no',   // -- scrollbars=yes|no|1|0;  -Whether or not to display scroll bars. IE, Firefox & Opera only
       status : 'no',       // -- status=yes|no|1|0;      -Whether or not to add a status bar
       titlebar : 'no',     // -- titlebar=yes|no|1|0;    -Whether or not to display the title bar. Ignored unless the calling application is an HTML Application or a trusted dialog box
-      toolbar : 'no',      // -- toolbar=yes|no|1|0;     -Whether or not to display the browser toolbar. IE and Firefox only
+      toolbar : 'no'      // -- toolbar=yes|no|1|0;     -Whether or not to display the browser toolbar. IE and Firefox only
     };
     defaultWinValues.specs = specs;
     preWindows[defaultWinValues.name] = defaultWinValues;
@@ -65,11 +66,12 @@ angular
       name  : 'winOne',
       url   : 'yourURL',
       specs : {},
-      secondClickclose : 'true'
+      secondClickclose : 'true',
+      autoUpdate: 'true'
     };
     specs = {      
       width : '600',
-      height: '700',
+      height: '700'
     };
     preDefineWindowOne.specs = specs;
     preWindows[preDefineWindowOne.name] = preDefineWindowOne;
@@ -82,7 +84,7 @@ angular
     };
     specs = {      
       width : '600',
-      height: '700',
+      height: '700'
     };
     preDefineWindowTwo.specs = specs;
     preWindows[preDefineWindowTwo.name] = preDefineWindowTwo;
