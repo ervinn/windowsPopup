@@ -3,8 +3,11 @@ windowsPopup
 
 Windows Popup AngularJS Module
 
-###Latest Version -> beta v0.0.1  
-2014-11-05
+If you want to contribute please clone the ['windowsPopup-dev' Development Environment](https://github.com/ervinn/windowsPopup-dev) and follow the instructions there.  Thanks. Any idea, comment, feedback will be appreciated. The [development repository](https://github.com/ervinn/windowsPopup-dev) contains a sample page to demonstrate the usage of 'windowsPopup' module, and it contains all the test code for it. >>Happy coding<<
+
+#####Latest stable version -> [beta v0.0.1 (Released on 2014-11-05) - downlaod from here](https://github.com/ervinn/windowsPopup/tree/v0.0.1)   
+
+#####Version: v0.0.2 -- Not released yet --
 
 -----------------------------------------------------------------------------------------
 
@@ -28,8 +31,8 @@ You should not modify **'windowsPopup.js'**.
 ###### Download :
 You can download the two needed .js files form Github. Search for windowsPopup reposatory.
 Or for testing you can point to the two links below:
-- http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/windowsPopup.js
-- http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/windowsPopupConfig.js
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.2/windowsPopup.js>
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.2/windowsPopupConfig.js>
 
 _NOTE_: do not use the above two links in production applications, the availability and performance of that server is not guaranteed. 
 
@@ -45,7 +48,7 @@ But, all those details are hiden in this module, so hopefully you wont need to w
 This **windowsPopup** module tries to help AngularJS developers to open secondary windows and communicate between, them. 
 Initially, this module just support child to parent data binding. 
 
-[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/).  
+[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.2/).  
 
 In this first release, functionality is limited, but we plan to add more and more as we go along...
 
@@ -86,7 +89,12 @@ Also feel free to define additional pre-defined windows. All predefined windows 
 
 _NOTE_: other additional config values that will be added in the future will follow these three level logic configuration.
 
+----
+#####New in v0.0.2 :
+
+- Now a child window can be a parent and open its own child window
+- A new configuration parameter is added. 
 
 
-
+-----
 
