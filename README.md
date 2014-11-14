@@ -93,10 +93,10 @@ _NOTE_: other additional config values that will be added in the future will fol
 #####New in v0.0.2 :
 
 - Now a child window can be a parent and open its own child window.
-- A new configuration parameter is added. The new configuration parameter is autoUpdate. This value can be specified in the default level, and the Pre-defined window level, or can be passed as an attribute auto-update in the wnp-popup directive. If the auto-update value is true (that was always true in v0.0.1), parent window will be automatically updated as data is typed on the Child. If that value is false, the parent won't be automatically updated. A new directive was created (wnp-update-parent), which must be placed to a butom or link, which if clicked, the parent window is updated at that time.
+- A new configuration parameter is added. The new configuration parameter is autoUpdate. This value can be specified in the default level, and the Pre-defined window level, or can be passed as an attribute auto-update in the wnp-popup directive. If the auto-update value is true (that was always true in v0.0.1), parent window will be automatically updated as data is typed on the Child. If that value is false, the parent won't be automatically updated. A new directive was added (wnp-update-parent), which must be placed to a buttom or link, which clicked, the parent window is updated at that time.
 - Added angular-route to the Demo application for the popup windows loading. Now windowsPopup.html is used as template, and based on the #/value on the URL, different partial HTMLs can be loaded inside windowsPopup.html .
 - New Sample popup partial windows were added to the Demo program, to demonstrate the new features.
-- Add test cases for the directive popup-link-model.
+- Added test cases for the directive popup-link-model.
 
 
 -----
