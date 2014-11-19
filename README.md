@@ -5,9 +5,7 @@ Windows Popup AngularJS Module
 
 If you want to contribute please clone the ['windowsPopup-dev' Development Environment](https://github.com/ervinn/windowsPopup-dev) and follow the instructions there.  Thanks. Any idea, comment, feedback will be appreciated. The [development repository](https://github.com/ervinn/windowsPopup-dev) contains a sample page to demonstrate the usage of 'windowsPopup' module, and it contains all the test code for it. >>Happy coding<<
 
-#####Latest stable version -> [beta v0.0.2 (Released on 2014-11-13) - download from here](https://github.com/ervinn/windowsPopup/tree/v0.0.2)   
-
-##### Next Version: v0.0.3 -- Not Released yet --
+##### This Version: v0.0.3 -- (Released on 2014-11-19) --
 
 -----------------------------------------------------------------------------------------
 
@@ -31,8 +29,8 @@ You should not modify **'windowsPopup.js'**.
 ###### Download :
 You can download the two needed .js files form Github. Search for windowsPopup reposatory.
 Or for testing you can point to the two links below:
-- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.2/windowsPopup.js>
-- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.2/windowsPopupConfig.js>
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.3/windowsPopup.js>
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.3/windowsPopupConfig.js>
 
 _NOTE_: do not use the above two links in production applications, the availability and performance of that server is not guaranteed. 
 
@@ -53,10 +51,10 @@ Initially, this module just support child to parent data binding.
 In this first release, functionality is limited, but we plan to add more and more as we go along...
 
 In this release we have :
-- ***win-popup*** : directive. Clicking this link will open the secondary window.
-- ***popup-link-model*** : directive. Use this directive to link parent model to child model.- 
+- ***wnp-popup*** : directive. Clicking this link will open the secondary window.
+- ***wnp-model*** : directive. Use this directive to link parent model to child model.- 
 
-The ***win-popup*** directive has all the attributes that are needed to pass on to 'window.open()' method's parameters. Plus is has some additional attributes to configure ***win-popup*** directive.
+The ***wnp-popup*** directive has all the attributes that are needed to pass on to 'window.open()' method's parameters. Plus is has some additional attributes to configure ***wnp-popup*** directive.
 
 Those can add up to lot of attributes. To avoid repeating yourself, you can pre-configure a popup window by specifying its parameters, in the '**WindowsPopupConfig.js**' file, and those parameters will be used in the  ***win-pop*** directive . So in your HTML you can popup a window, like so :
 
@@ -90,14 +88,19 @@ Also feel free to define additional pre-defined windows. All predefined windows 
 _NOTE_: other additional config values that will be added in the future will follow these three level logic configuration.
 
 ----
+#####New in v0.0.3 :
+- Made data binding bi-directional. Now when parent updates model data that is linked to child model, the child model is updated automatically.
+- Rename directives and services names. All names are prefixed with `wnp-*` .
+- Pass a Title text (`wnp-title`) to the Child window, or if that is not specified pass the text of the link the user clicked.
+- Add 'Build Your Window' section to the Demo app.
+----
 #####New in v0.0.2 :
 
 - Now a child window can be a parent and open its own child window.
 - A new configuration parameter is added. The new configuration parameter is autoUpdate. This value can be specified in the default level, and the Pre-defined window level, or can be passed as an attribute auto-update in the wnp-popup directive. If the auto-update value is true (that was always true in v0.0.1), parent window will be automatically updated as data is typed on the Child. If that value is false, the parent won't be automatically updated. A new directive was added (wnp-update-parent), which must be placed to a buttom or link, which clicked, the parent window is updated at that time.
 - Added angular-route to the Demo application for the popup windows loading. Now windowsPopup.html is used as template, and based on the #/value on the URL, different partial HTMLs can be loaded inside windowsPopup.html .
 - New Sample popup partial windows were added to the Demo program, to demonstrate the new features.
-- Added test cases for the directive popup-link-model.
-
+- Added test cases for the directive wnp-model.
 
 -----
 
