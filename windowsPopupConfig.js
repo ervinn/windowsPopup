@@ -14,10 +14,10 @@
 angular
   .module('windowsPopupConfig', [])
   .constant('contans', {
-    'version': '0.0.1',
+    'version': '0.0.3',
    })
   
-  .provider('wpopConfig', function() {
+  .provider('wnpConfig', function() {
     var preWindows = {};
     var config = {};    
     var defaultWinValues = null;
@@ -35,12 +35,13 @@ angular
     
     // --- Default Windows Parameters ---
     defaultWinValues = {  
-      name  : 'defaultWin',   // -- name - The name of the window (Note: the name does not specify the title of the new window)
+      wnpName  : 'defaultWin',   // -- wnpName - The name of the window (Note: the name does not specify the title of the new window)
+      wnpTitle : null,   // -- NOTE, There may be no point to have default title, Use null, so the link Text will be the Popup Title
       url   : 'views/popupWindow.html',  // -- PROBABLY YOU WANT THIS TO BE DIFFERENT --
       specs : {},
       // --- Additional Configuration values, other than 'specs' --      
-      secondClickclose : 'false',
-      autoUpdate: 'true'
+      wnpToggleOpenClose : 'false',
+      wnpAutoUpdate: 'true'
     };
     specs = {
       // --- window.open() 'specs' parameters -- 
@@ -59,35 +60,36 @@ angular
       toolbar : 'no'      // -- toolbar=yes|no|1|0;     -Whether or not to display the browser toolbar. IE and Firefox only
     };
     defaultWinValues.specs = specs;
-    preWindows[defaultWinValues.name] = defaultWinValues;
+    preWindows[defaultWinValues.wnpName] = defaultWinValues;
 
     // --- PreDefined Window One ---
     var preDefineWindowOne = {
-      name  : 'winOne',
+      wnpName  : 'winOne',
+      wnpTitle : 'PreDefined winOne Title',   // --- NOTE: If you do not specify this the text of the Link will be the title
       url   : 'yourURL',
       specs : {},
-      secondClickclose : 'true',
-      autoUpdate: 'true'
+      wnpToggleOpenClose : 'true',
+      wnpAutoUpdate: 'true'
     };
     specs = {      
       width : '600',
       height: '700'
     };
     preDefineWindowOne.specs = specs;
-    preWindows[preDefineWindowOne.name] = preDefineWindowOne;
+    preWindows[preDefineWindowOne.wnpName] = preDefineWindowOne;
 
     // --- PreDefined Window One ---
     var preDefineWindowTwo = {
-      name  : 'winTwo',
+      wnpName  : 'winTwo',
       specs : {},
-      secondClickclose : 'false'
+      wnpToggleOpenClose : 'false'
     };
     specs = {      
       width : '600',
       height: '700'
     };
     preDefineWindowTwo.specs = specs;
-    preWindows[preDefineWindowTwo.name] = preDefineWindowTwo;
+    preWindows[preDefineWindowTwo.wnpName] = preDefineWindowTwo;
 
     // ---- You can modify above --------
     // ---- CONFIGURATION VALUES ENDS ---
@@ -97,8 +99,8 @@ angular
     /**
      * --- This will return the Pre defined window 'specs' defined above ---
      */
-    config.getPreWindow = function(name) {
-      return preWindows[name];
+    config.getPreWindow = function(wnpName) {
+      return preWindows[wnpName];
     };
 
     /** 
