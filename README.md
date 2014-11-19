@@ -56,16 +56,16 @@ In this release we have :
 
 The ***wnp-popup*** directive has all the attributes that are needed to pass on to 'window.open()' method's parameters. Plus is has some additional attributes to configure ***wnp-popup*** directive.
 
-Those can add up to lot of attributes. To avoid repeating yourself, you can pre-configure a popup window by specifying its parameters, in the '**WindowsPopupConfig.js**' file, and those parameters will be used in the  ***win-pop*** directive . So in your HTML you can popup a window, like so :
+Those can add up to lot of attributes. To avoid repeating yourself, you can pre-configure a popup window by specifying its parameters, in the '**WindowsPopupConfig.js**' file, and those parameters will be used in the  ***wnp-popup*** directive . So in your HTML you can popup a window, like so :
 
 ```
-<win-pop name="myPredifinedWindow" />
+<wnp-popup name="myPredifinedWindow" />
 ```
 In this case all the needed parameters are defined in the **windowsPopupConfig** module.
-If you want to override the default values, just specify the new values in the **win-pop** directive as an attribute. Usually you may want to use different URLs to open the same kind of window, then you say that like so :
+If you want to override the default values, just specify the new values in the **wnp-popup** directive as an attribute. Usually you may want to use different URLs to open the same kind of window, then you say that like so :
 
 ```
-<win-pop name="myPredifinedWindow" url="http://...." />
+<wnp-popup name="myPredifinedWindow" url="http://...." />
 ```
 
 You do the pre-configuration in the '**WindowsPopupConfig.js**' file, where the '**windowsPopupConfig**' module is defined.
@@ -73,17 +73,17 @@ You do the pre-configuration in the '**WindowsPopupConfig.js**' file, where the 
 There are three levels where you can configure the needed parameters for a popup window :
 - 1st level - **defualt window parameter values**. Used if no value is spefified on the two other levels.
 - 2nd level - **pre-defined window values**, that can be access by window name. These values can be overwritten by the next level.
-- 3rd level - **attribute values** specified on the ``` <win-pop width="500" height="500" ... /> ``` directive as attributes.
+- 3rd level - **attribute values** specified on the ``` <wnp-popup width="500" height="500" ... /> ``` directive as attributes.
  
 The first two level values are defined in the '**WindowsPopupConfig.js**' file. The 3rd level values are defined in your HTML file.
 
 The lowest level values can be modified by changing the ``` var defaultWinValues ``` object values.
-Those values will be used only if, no values are specified in you predefined window variable, or there is no attribute value in the **'win-pop'** directive.
+Those values will be used only if, no values are specified in you predefined window variable, or there is no attribute value in the **'wnp-popup'** directive.
 
 The second level values are in your predifined window variable specified in the '**WindowsPopupConfig.js**' file. There are two pre-defined variables are already defined. Those are ``` var preDefineWindowOne ``` and ``` var preDefineWindowTwo ```.
 Feel free to modify any of the values. Modify only the values. If you are a javaScript developer, it is obvious what you can and can not modify. 
 
-Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. _NOTE_: the key in the JavaScript object is the window name, that is the name attribute you specify in the ```<win-pop name="..." /> ``` directives, to refernce the values.
+Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. _NOTE_: the key in the JavaScript object is the window name, that is the name attribute you specify in the ```<wnp-popup name="..." /> ``` directives, to refernce the values.
 
 _NOTE_: other additional config values that will be added in the future will follow these three level logic configuration.
 
