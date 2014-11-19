@@ -93,6 +93,7 @@ _NOTE_: other additional config values that will be added in the future will fol
 - Rename directives and services names. All names are prefixed with `wnp-*` .
 - Pass a Title text (`wnp-title`) to the Child window, or if that is not specified pass the text of the link the user clicked.
 - Add 'Build Your Window' section to the Demo app.
+
 ----
 #####New in v0.0.2 :
 
