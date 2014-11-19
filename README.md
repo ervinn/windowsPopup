@@ -46,7 +46,7 @@ But, all those details are hiden in this module, so hopefully you wont need to w
 This **windowsPopup** module tries to help AngularJS developers to open secondary windows and communicate between, them. 
 Initially, this module just support child to parent data binding. 
 
-[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.2/).  
+[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.3/).  
 
 In this first release, functionality is limited, but we plan to add more and more as we go along...
 
