@@ -5,8 +5,9 @@ Windows Popup AngularJS Module
 
 If you want to contribute please clone the ['windowsPopup-dev' Development Environment](https://github.com/ervinn/windowsPopup-dev) and follow the instructions there.  Thanks. Any idea, comment, feedback will be appreciated. The [development repository](https://github.com/ervinn/windowsPopup-dev) contains a sample page to demonstrate the usage of 'windowsPopup' module, and it contains all the test code for it. >>Happy coding<<
 
+#####Latest stable version -> [beta v0.0.4 (Released on 2014-12-15) - download from here](https://github.com/ervinn/windowsPopup/tree/v0.0.4)  
 
-##### Version: v0.0.4 -- (Released on 2014-12-15) --
+##### Next Version: v0.0.5 -- (Released on NOT YET) --
 
 -----------------------------------------------------------------------------------------
 
