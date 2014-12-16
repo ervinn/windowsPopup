@@ -17,8 +17,8 @@
 angular
   .module('windowsPopup', ['windowsPopupConfig']) 
   .constant('wnpContans', {
-    'version': '0.0.3',
-    'release_date' : '2014-11-19',
+    'version': '0.0.4',
+    'release_date' : '2014-12-16',
     'debugMode' : false
    })
   .config( function (wnpContans) {
@@ -119,7 +119,7 @@ angular
     };
 
     service.notDefined = function( val ) {
-      if ( typeof val === 'undefined' || val === null) {
+      if ( typeof val === 'undefined' || val === null || val === '') {
         return true;
       } else {
         return false;
@@ -130,21 +130,30 @@ angular
   })
 
   /**
-   * This ONLY used in the Child window to get the data what the Parent provides
+   * This used Child window to get the data what the Parent provides
    * When the Child window loads, the 'window.opener' object should have the '$$$shareData' property.
    * The parent window puts it for the Child.
    */
   .factory('wnpFromParent', ['$window', 'wnpUtil', 'wnpToChild', function ($window, wnpUtil, wnpToChild) {
+      var modalData;
+      var modalBindingToBeCalledfncList = [];
+
       var shareData = null;
       var service = {};
       service.isData = false;
       if ( service.isData === false) {
-
           if ( $window.opener && $window.opener !== null && $window.opener.$$$shareData ) {
             shareData = $window.opener.$$$shareData;
             service.isData = true;
+            // --- Set the fact that Child is loaded ---
+            shareData.CONFIG.isWnpChildLoaded = true;
+
+            // -- Call the onOpen fnc --
+            if ( shareData.CONFIG  && shareData.CONFIG.wnpOnOpen ) {
+              shareData.CONFIG.wnpOnOpen( shareData.CONFIG.wnpName );
+            }
           }
-          
+
           // -- For IE closing function may need to be from the Parent
           if ( ! $window.onbeforeunload ) {
             if ( $window.opener && $window.opener !== null && $window.opener.$$$onCloseingFnc ) {
@@ -153,13 +162,36 @@ angular
           }
       }
 
-      /*
-       * -- This is caled from the Child te get data from the Parent --
+      /**
+       * -- This is called from the Child te get data from the Parent --
        */
       service.get = function() {
-        return shareData.DATA;
-         
+        return shareData.DATA;         
       };
+
+      /**
+       * -- This is called to get the Modal data
+       */
+      service.getModalData = function() {
+        return modalData.DATA;
+      };
+
+      /**
+       * -- This is called to registert Modal window binding functions ---
+       */
+      service.registerModalBindingToBeCalled = function(fnc) {
+        modalBindingToBeCalledfncList.push(fnc);
+      };
+      /**
+       * -- This is called to call ALL registert Modal window binding functions ---
+       */
+      service.bindModaldata = function() {
+        var len = modalBindingToBeCalledfncList.length;
+        for (var i =0; i < len; i++) {
+          modalBindingToBeCalledfncList[i]();
+        }
+      };
+
 
       service.getWnpTitle = function() {
         return shareData.CONFIG.wnpTitle;
@@ -168,17 +200,42 @@ angular
       /**
        * -- This is called from the Popup service, when the window is opened. --
        */
-      service.setDataToChild = function(closeCallBack, wnpAutoUpdate, wnpTitle) {
+      service.setDataToChild = function(wnpAutoUpdate, CONFIG) {
           var childOnCloseFnc = function() {
-              closeCallBack();
+              CONFIG.wnpOnClose();
           };
           var childOnCloseFncWithWarning = function() {
-              closeCallBack();
+              CONFIG.wnpOnClose();
             return 'This Popup window can not be reloaded. If you want to Exit, that is okay, go ahead.';
           };
-          $window.$$$shareData = wnpToChild.applyAndGetDataForChild(wnpAutoUpdate, wnpTitle);  
+          $window.$$$shareData = wnpToChild.applyAndGetDataForChild(wnpAutoUpdate, CONFIG);  
           $window.$$$onCloseingFnc = childOnCloseFnc;
       };
+
+      /**
+       * -- This is called from the Popup service, when Modal window is opened. --
+       */
+      service.setDataToModal = function(wnpAutoUpdate, CONFIG) {
+        modalData = wnpToChild.applyAndGetDataForChild(wnpAutoUpdate, CONFIG);
+console.log('modalData=', modalData);        
+      };
+
+
+
+      /**
+       * -- This is a 'static' method, called by the Parent to check if the Child window loaded ---
+       */
+      service.isChildWindowLoaded =  function(win) {
+        var ret = false;
+        if ( wnpUtil.notDefined(win.opener) === false &&
+             wnpUtil.notDefined(win.opener.$$$shareData) === false &&
+             wnpUtil.notDefined(win.opener.$$$shareData.CONFIG) === false ) {
+
+          ret = win.opener.$$$shareData.CONFIG.isWnpChildLoaded;
+        }
+        return ret;
+      };
+
       return service;
   }])
 
@@ -189,13 +246,13 @@ angular
    * Because of this this service creates and adds functions to a list for each Model data, and will call those functions 
    * when the 'applyAndGetDataForChild' method is called. 
    */
-  .factory('wnpToChild', ['wnpUtil', function(wnpUtil) {
+  .factory('wnpToChild', ['wnpUtil', '$timeout', function(wnpUtil, $timeout) {
 
       var dataToChildFncList = [];      
       var service = {};
 
 
-      service.applyAndGetDataForChild = function(wnpAutoUpdate, wnpTitle) {
+      service.applyAndGetDataForChild = function(wnpAutoUpdate, CONFIG) {
         var ret = {};
         ret.DATA = {};
         ret.CONFIG = {};
@@ -206,18 +263,32 @@ angular
 	        inDta.wnpAutoUpdate = wnpAutoUpdate;
           ret.DATA[inDta.name] = inDta;
         }
-        ret.CONFIG.wnpTitle = wnpTitle;
+        ret.CONFIG = CONFIG;
         return ret;
       };
 
      service.addOneSharedModel = function(scope, popupBindVar, angModel, wnpUpdChild) {
         var fnc = function() {
+          var unwatchParentFnc;
+          var watchParentFnc;
+
           var inDta = {};
           inDta.name = popupBindVar;
           inDta.data = wnpUtil.getFromScope(scope, angModel);
           inDta.updateParentfnc = function(backMsg) {          
+            if ( unwatchParentFnc ) {
+              unwatchParentFnc();  // --- Stop watching 
+            } 
+            // --- updateParent --
             wnpUtil.setToScope(scope, angModel, backMsg);
-            scope.$apply();
+
+            if ( watchParentFnc ) {
+              unwatchParentFnc = watchParentFnc(); // --- Start Watching again, Eliminate circular dependency --
+            }
+            $timeout(function () {      
+              scope.$apply();
+            }, 300);
+            
           };
 
           if ( wnpUtil.notDefined(wnpUpdChild)  || (wnpUpdChild != 'false' && wnpUpdChild != 'no' && wnpUpdChild != false) ) {
@@ -226,12 +297,21 @@ angular
               console.log('This is a Dummy template method. The Child need to replace it.');
             };
             // --- Data Bind from Parent to Child --
-            scope.$watch(angModel, function(newValue, oldValue) {
-              if (newValue != oldValue) {
-                inDta.updateChildfnc(newValue);
+            watchParentFnc = function() { 
+              scope.$watch(angModel, function(newValue, oldValue) {
+              try {
+                if (newValue != oldValue) {
+                  inDta.updateChildfnc(newValue);
+                }
+              } catch(err) {
               }
             });
+            };
+            // --- Call to Watch Parent to update Child ---
+            unwatchParentFnc = watchParentFnc();  
           }
+
+
           return inDta;
         };
         // --- Add the function to be called when the user clickes on the link
@@ -247,7 +327,7 @@ angular
    * The 'wnpPopup' directive calls this service to open the Child Window, when the user clicks
    * This service keeps references for all opened Child windows 
    */
-  .factory('wnpOpenService', ['$window', 'wnpFromParent', function ($window, wnpFromParent) {
+  .factory('wnpOpenService', ['$window', '$interval', 'wnpFromParent', 'wnpConfig', function ($window,  $interval, wnpFromParent, wnpConfig) {
       var service = {
         popWindows : {}
       };
@@ -282,7 +362,7 @@ angular
        * Open the popup Window
        * @return true if the window was opened 
        */
-      service.popWdwfnc = function( url, wnpName, specsText, wnpToggleOpenClose, wnpAutoUpdate, wnpTitle, closeCallBack) {
+      service.popWdwfnc = function( url, wnpName, specsText, wnpToggleOpenClose, wnpAutoUpdate, CONFIG) {
         var ret = false;  // -- return value
 
         var currWind = this.popWindows[wnpName];
@@ -302,19 +382,54 @@ angular
             $window.alert('Dialog Window \"'+wnpName+'\" is already open. Close it to open a new one.'); 
           }          
         } else {
+          // --- Set the data to Child --
+          wnpFromParent.setDataToChild(wnpAutoUpdate, CONFIG);
+
           // --- Open Child Window ---
           currWind.popWdw = $window.open( url, wnpName, specsText, true );
-          // --- Set the data to Child --
-          wnpFromParent.setDataToChild(closeCallBack, wnpAutoUpdate, wnpTitle);
-
           currWind.popWdw.blur();
           currWind.popWdw.focus();
           // --- I reached this far, so the window was opened successfully ---
           ret = true;
+
+          // --- Check if the opened window has windowsPopup Angular Module there ---
+          var popWinTimeOutMillisec = wnpConfig.popWinTimeOutMillisec;
+          var loaded;
+          var promize = $interval( function() {
+            loaded = wnpFromParent.isChildWindowLoaded( currWind.popWdw);
+ //           console.log('LODAEDDDDDD', loaded );
+            if (loaded === true ) {
+//                promize.resolve(true);
+              $interval.cancel(promize);
+            }
+          }, 300, popWinTimeOutMillisec / 300, false );
+          
+          promize.then(function(result) {
+//            console.log('Promize Result', result);
+            // --- Failed to open in a certain time ---
+            if ( loaded != true ) {
+              $window.alert('WnpPopup Window faild to open. The URL is invalid, and/or AngularJS or windowsPopup module not loaded on the Child Window.');
+              currWind.closeWdwfnc();
+            } 
+            $interval.cancel(promize);
+          });
         }
 
         return ret;
       };  
+
+      /**
+       * Open the popup Window
+       * @return true if the window was opened 
+       */
+      service.popModalfnc = function(wnpAutoUpdate, CONFIG) {
+
+          // --- Set the data to Modal --
+          wnpFromParent.setDataToModal(wnpAutoUpdate, CONFIG);
+
+          wnpFromParent.bindModaldata();
+      }
+
 
       return service;
   }])
@@ -322,13 +437,17 @@ angular
   /**
    * This is the directive to popup a window with the left mouse click 
    */       
-  .directive('wnpPopup', ['$window', 'wnpOpenService', 'wnpConfig', 'wnpUtil', function ($window, wnpOpenService, wnpConfig, wnpUtil) {
+  .directive('wnpPopup', ['$window', '$parse', 'wnpOpenService', 'wnpConfig', 'wnpUtil', function ($window, $parse, wnpOpenService, wnpConfig, wnpUtil) {
     var ret = {};
 
     ret.restrict = 'EA';
     ret.template = '<span class=""/><a ng-transclude></a>';
     ret.replace  = false;
     ret.transclude = true;
+    ret.scope = { 
+          wnpOnOpen : '&',
+          wnpOnClose: '&'
+        };
     ret.link = function (scope, elem, attrs) {
         var iconElem = elem.children('span');
         elem.css({ 'cursor': 'pointer' });
@@ -342,6 +461,34 @@ angular
           scope.$apply();
 
           var params = prepareParameters(attrs, elem);
+          var wnpOnOpen  = scope.wnpOnOpen;
+          var wnpOnClose = scope.wnpOnClose;
+          var CONFIG = {};
+          CONFIG.wnpName  = params.wnpName;
+          CONFIG.wnpTitle = params.wnpTitle;
+          CONFIG.isWnpChildLoaded - false;
+          CONFIG.wnpOnClose =  function () {
+            // -- Note the remove MUST be first ---
+            iconElem.removeClass( wnpConfig.winOpenSignCssClass );
+            iconElem.addClass   ( wnpConfig.popupLinkCssClass ); 
+
+            // --- Call the User CallBack --
+            if (wnpOnClose) {
+              wnpOnClose({wnpName : params.wnpName});
+              scope.$apply();
+            }
+          }; 
+          CONFIG.wnpOnOpen = function () {
+            // -- Note the remove MUST be first ---
+            iconElem.removeClass( wnpConfig.popupLinkCssClass ); 
+            iconElem.addClass   ( wnpConfig.winOpenSignCssClass );
+
+            // --- Call the User CallBack --
+            if (wnpOnOpen) {
+              wnpOnOpen({wnpName : params.wnpName});
+              scope.$apply();
+            } 
+          };
 
           // --- Call a service to difplay the popup  
           var ret = wnpOpenService.popWdwfnc( 
@@ -350,17 +497,10 @@ angular
                                   params.specsText, 
                                   params.wnpToggleOpenClose,
                                   params.wnpAutoUpdate,
-                                  params.wnpTitle,
-                                  function () {
-                                    // -- Note the remove MUST be first ---
-                                    iconElem.removeClass( wnpConfig.winOpenSignCssClass );
-                                    iconElem.addClass   ( wnpConfig.popupLinkCssClass ); 
-                                  } );
+                                  CONFIG);
 
           if ( ret === true ) {
-            // -- Note the remove MUST be first ---
-            iconElem.removeClass( wnpConfig.popupLinkCssClass ); 
-            iconElem.addClass   ( wnpConfig.winOpenSignCssClass );
+          //  console.log('Open successfully');
           }
 
       });
@@ -381,6 +521,7 @@ angular
         var wnpToggleOpenClose = attrs.wnpToggleOpenClose;
         var wnpAutoUpdate      = attrs.wnpAutoUpdate;
         var wnpTitle           = attrs.wnpTitle;
+
         specs.width      = attrs.width;
         specs.height     = attrs.height;
         specs.left       = attrs.left;
@@ -452,6 +593,42 @@ angular
  *     A Child can be a parent for an other child. ---
  */
 .directive('wnpModel', ['$rootScope','wnpFromParent', 'wnpToChild', 'wnpUtil', '$timeout', function ($rootScope,wnpFromParent, wnpToChild, wnpUtil, $timeout ) {
+
+    var childParentBindingFnc = function( scope,
+                                          shareData,
+                                          popupBindVar,
+                                          angModel ) {
+      var item = shareData[popupBindVar];
+      if ( item ) {
+        // --- Set data to Child scope; from SharedData --
+        wnpUtil.setToScope(scope, angModel, item.data); 
+        $timeout(function () {
+            scope.$apply();
+        }, 0);
+
+        // --- Set the function the Parent should call when data changes ---
+        item.updateChildfnc = function(valueMsg) {
+          $timeout( function() {
+            wnpUtil.setToScope(scope, angModel, valueMsg);
+          }, 0 );
+  //                  scope.$apply();
+        };
+
+        if ( item.wnpAutoUpdate === true || item.wnpAutoUpdate === 'true'  ) {
+          // --- Data Bind from Child to Parent --
+          scope.$watch(angModel, function(newValue, oldValue) {
+            item.updateParentfnc(newValue);
+          });
+          //console.log('CHILD');
+        } else {
+          // --- Store the ng-model name to get its value later ---
+          item.$$$angModel = angModel;
+        }
+      }
+
+    };
+
+
     return {
         restrict: 'A',
         link: function (scope, elem, attrs) {
@@ -460,45 +637,40 @@ angular
             var angModel     = attrs.ngModel;
             var wnpUpdChild  = attrs.wnpUpdChild;
 
-            // --- Binding from Child to Parent ---  
-            if ( popupBindVar &&
-                 angModel  &&
-                 wnpFromParent.isData === true) {
+            var par;
+            if ( elem.parents ) {
+              par = elem.parents('div.wnp-modal');
+            }
 
-              var shareData = wnpFromParent.get();
-              var item = shareData[popupBindVar];
-              if ( item ) {
-                // --- Set data to Child scope; from SharedData --                                    
-                wnpUtil.setToScope(scope, angModel, item.data);
+            // --- If this is part of a Model ; skip Data Binding --
+            if ( wnpUtil.notDefined(par) == false &&  par.length > 0 ) {
+              // --- This is used in a wnp-pop window ---
+              // --- Register this element for Modal updtae
+              wnpFromParent.registerModalBindingToBeCalled( function() {
+                var shareD = wnpFromParent.getModalData();
+                childParentBindingFnc(scope, shareD, popupBindVar, angModel);                
+              });
 
-                // --- Set the function the Parent should call when data changes ---
-                item.updateChildfnc = function(valueMsg) {
-                  $timeout( function() {
-                    wnpUtil.setToScope(scope, angModel, valueMsg);
-                  }, 0 );
-//                  scope.$apply();
-                };
+            } else {
+              // --- Binding from Child to Parent ---  
+              if ( popupBindVar &&
+                   angModel  &&
+                   wnpFromParent.isData === true) {
 
-                if ( item.wnpAutoUpdate === true || item.wnpAutoUpdate === 'true'  ) {
-                  // --- Data Bind from Child to Parent --
-                  scope.$watch(angModel, function(newValue, oldValue) {
-                    item.updateParentfnc(newValue);
-                  });
-                  //console.log('CHILD');
-                } else {
-        		      // --- Store the ng-model name to get its value later ---
-        		      item.$$$angModel = angModel;
-                }
+                var shareData = wnpFromParent.get();
+
+                childParentBindingFnc(scope, shareData, popupBindVar, angModel);
+
+                // --- Get the CONFIG wnpTitle values ---
+                var wnpTitle = wnpFromParent.getWnpTitle();
+                $rootScope.wnpTitle = wnpTitle;
+              }  
+
+              // --- In parent 
+              if ( popupBindVar && angModel ) {
+                // --- Link data from Parent scope and defer it to Shared object
+                wnpToChild.addOneSharedModel(scope, popupBindVar, angModel, wnpUpdChild);
               }
-
-              // --- Get the CONFIG wnpTitle values ---
-              var wnpTitle = wnpFromParent.getWnpTitle();
-              $rootScope.wnpTitle = wnpTitle;
-            }  
-
-            if ( popupBindVar && angModel ) {
-              // --- Link data from Parent scope and defer it to Shared object
-              wnpToChild.addOneSharedModel(scope, popupBindVar, angModel, wnpUpdChild);
             }
         }
     };
@@ -559,28 +731,57 @@ angular
       }; 
   }])
 
-.directive('popContextMenu', ['$window', '$http', 'wnpOpenService', 'wnpConfig', function ($window, $http, wnpOpenService, wnpConfig) {
-    return {
-      restrict: 'EA',
-        link : function (scope, elem, attrs) {
-          $http.get('views/menuPopup.html').success(function(data, status, headers, config) {
-              // this callback will be called asynchronously
-              // when the response is available
-console.log(data);              
-              elem.append(data);
-          }).error(function(data, status, headers, config) {
-                // called asynchronously if an error occurs
-              // or server returns response with an error status.
-console.log('ERROR');              
-          });
+// .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
 
-            elem.bind('contextmenu', function () {
-$window.alert('Right click');
-            elem.find('.dropdown-toggle').dropdown();
-            return true;
+.directive('wnpPop', ['$http', 'wnpOpenService', 'wnpConfig', function ($http, wnpOpenService, wnpConfig) {
+  var ret = {};
+  var modelContentUrl = '';
+  var modalW = function() {  return '<!-- Small modal -->' +
+
+'<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="false">' +
+  '<div class="modal-dialog modal-sm">' +
+    '<div class="wnp-modal modal-content" > ' +
+    '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>' +
+      '<div ng-include="' + "'" + modelContentUrl + "'"  + '">' +
+        '<!-- Modal content -->' +
+      '</div>' +
+    '</div>' +
+  '</div>' +
+'</div>' 
+//'<div ng-transclude />'
+ };
+
+  ret.restrict ='EA';
+//  ret.template = modalW;
+//  ret.replace  = false;
+//  ret.transclude = true;
+
+  ret.compile = function (element, atttributes) {
+
+    modelContentUrl = atttributes.url;
+
+    var parent = element.parent();
+    var modalElem = angular.element(modalW());
+    parent.append(modalElem);
+
+    var linkFunction = function($scope, element, atttributes) {
+          element.bind('contextmenu', function () {
+            var CONFIG = {};
+            CONFIG.wnpName = 'Modal';
+
+            wnpOpenService.popModalfnc("true", CONFIG);
+
+            element.parent().find('.modal').modal( {'backdrop' : 'static'} );
+            return false;
           });
-        }
-    };
+          // element.bind('click', function() {
+          //   element.find('.modal').modal('hide');
+          // });    
+    }
+    return linkFunction;
+  };
+  return ret;
+
 }])
 
 .directive('popContextModal', ['$window', '$http', 'wnpConfig', function ($window, $http, wnpConfig) {

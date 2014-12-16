@@ -14,7 +14,7 @@
 angular
   .module('windowsPopupConfig', [])
   .constant('contans', {
-    'version': '0.0.3',
+    'version': '0.0.4',
    })
   
   .provider('wnpConfig', function() {
@@ -28,6 +28,8 @@ angular
     // ---- You can modify below ONLY Modify values, or add new predefined windows 
     // ---- Do not modify Existing varable names ---
     // ------------------------------------
+
+    config.popWinTimeOutMillisec = 3000;  // --- Time waited for the Child window to load. --
 
     // -- 
     config.winOpenSignCssClass = 'glyphicon glyphicon-new-window';
