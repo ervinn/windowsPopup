@@ -5,9 +5,8 @@ Windows Popup AngularJS Module
 
 If you want to contribute please clone the ['windowsPopup-dev' Development Environment](https://github.com/ervinn/windowsPopup-dev) and follow the instructions there.  Thanks. Any idea, comment, feedback will be appreciated. The [development repository](https://github.com/ervinn/windowsPopup-dev) contains a sample page to demonstrate the usage of 'windowsPopup' module, and it contains all the test code for it. >>Happy coding<<
 
-#####Latest stable version -> [beta v0.0.3 (Released on 2014-11-19) - download from here](https://github.com/ervinn/windowsPopup/tree/v0.0.3)  
 
-##### Next Version: v0.0.4 -- (Released on NOT YET) --
+##### Version: v0.0.4 -- (Released on 2014-12-15) --
 
 -----------------------------------------------------------------------------------------
 
@@ -31,8 +30,8 @@ You should not modify **'windowsPopup.js'**.
 ###### Download :
 You can download the two needed .js files form Github. Search for windowsPopup reposatory.
 Or for testing you can point to the two links below:
-- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.3/windowsPopup.js>
-- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.3/windowsPopupConfig.js>
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.4/windowsPopup.js>
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.4/windowsPopupConfig.js>
 
 _NOTE_: do not use the above two links in production applications, the availability and performance of that server is not guaranteed. 
 
@@ -48,7 +47,7 @@ But, all those details are hiden in this module, so hopefully you wont need to w
 This **windowsPopup** module tries to help AngularJS developers to open secondary windows and communicate between, them. 
 Initially, this module just support child to parent data binding. 
 
-[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.3/).  
+[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.4/).  
 
 In this first release, functionality is limited, but we plan to add more and more as we go along...
 
@@ -88,6 +87,15 @@ Feel free to modify any of the values. Modify only the values. If you are a java
 Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. _NOTE_: the key in the JavaScript object is the window name, that is the name attribute you specify in the ```<wnp-popup name="..." /> ``` directives, to refernce the values.
 
 _NOTE_: other additional config values that will be added in the future will follow these three level logic configuration.
+
+-----
+#####New in v0.0.4 :
+- Two new optional attributes are added to `wnp-popup` directive. Those are `wnp-on-open` and `wnp-on-close`. Now it is possible to add two callback functions, the function specified in `wnp-on-open` will be called when your window is opened, and the function in `wnp-on-close` will be called when your window is closed. Usage : ...  `wnp-on-open="yourOnOpenFnc(wnpName)" ... wnp-on-close="yourOnCloseFnc(wnpName)" `. Note : you need to use `wnpName` so the Window name will be passed in to your callback. The spelling is important for `wnpName` but the function name can be your choise.
+- BUG Fix : When the Child window reseted by pressing the F5 key, now the connections between Child and Parent are not lost.
+- Now, Parent window checks if the Child window loaded the AngularJS and windowPopup modules, before the `wnpOnOpen(wnpName)' method is called. If those are not loaded after a certain time interval, then an alert error mesage is presented, and the popup window is closed. The time interval will be configurable. 
+- Add E2E (end to end) test cases for the Demo program using [Protractor][protractor]. These tests
+are run with the [Protractor][protractor] End-to-End test runner.
+- Add new directive `wnp-pop`. Sometimes you do not want to open a new browser window, just a simple Modal window would do. The `wnp-pop` directive is similar to `wnp-popup`, but it opens a Modal window not a new browser window. The good thing is that you can use the same html partial, whatever is in the url attribute will be used. The `wnp-pop` is using a new attribute, that is `wnp-pop-name`, to use pre-defined Modal windows. The main difference is that the `wnp-pop` directive open the Modal window by the right mouse click. This way, this new directive could also be used to open a context menu for you application. ( TODO: After this we will add a directive to open a drop down menu by right click, we plan to call it `wnp-pop-dn` or `wnp-pop-down` .) So you will have the option to have a simple drop down or you you can have a Modal window for more complex context menu, depending of your needs.
 
 ----
 #####New in v0.0.3 :
