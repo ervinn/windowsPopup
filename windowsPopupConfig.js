@@ -14,17 +14,18 @@
 angular
   .module('windowsPopupConfig', [])
   .constant('contans', {
-    'version': '0.0.4',
+    'version': '0.0.5',
    })
   
   .provider('wnpConfig', function() {
     var preWindows = {};
+    // --- This the Config object, will be returned --
     var config = {};    
     var defaultWinValues = null;
     var specs = null;
     
     // ------------------------------------
-    // ---- CONFIGURATION VALUES STARTS ---
+    // ---- CONFIGURATION VALUES STARTS for wnp-popup directive ---
     // ---- You can modify below ONLY Modify values, or add new predefined windows 
     // ---- Do not modify Existing varable names ---
     // ------------------------------------
@@ -35,7 +36,9 @@ angular
     config.winOpenSignCssClass = 'glyphicon glyphicon-new-window';
     config.popupLinkCssClass   = 'glyphicon glyphicon-upload';
     
-    // --- Default Windows Parameters ---
+    /** 
+     * Default wnp-popup New Browser Windows Parameters  --
+     */
     defaultWinValues = {  
       wnpName  : 'defaultWin',   // -- wnpName - The name of the window (Note: the name does not specify the title of the new window)
       wnpTitle : null,   // -- NOTE, There may be no point to have default title, Use null, so the link Text will be the Popup Title
@@ -96,7 +99,7 @@ angular
     // ---- You can modify above --------
     // ---- CONFIGURATION VALUES ENDS ---
     // ----------------------------------
-    // === DO NOT Modify After this ---
+    // === DO NOT Modify After this ONLY in the next provider for Modal Windows---
 
     /**
      * --- This will return the Pre defined window 'specs' defined above ---
@@ -120,4 +123,108 @@ angular
     }; 
 
     return config; 
+  })
+  .provider('wnpModalConfig', function() {
+    // --- This the Config object, will be returned --
+    var config = {}; 
+    var smallModalElement = '<!-- Small modal -->' +
+      '<div class="$$$modalName$$$ modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="false">' +
+        '<div class="modal-dialog modal-sm">' +
+          '<div class="wnp-modal modal-content" > ' +
+          '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>' +
+            '<div ng-include="' + "'" + '$$$modalContentUrl$$$' + "'"  + '">' +
+              '<!-- Modal content -->' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  var largeModalElement = '<!-- Large modal -->' +
+    '<div class="$$$modalName$$$ modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="false">' +
+      '<div class="modal-dialog modal-lg">' +
+        '<div class="wnp-modal modal-content" > ' +
+        '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>' +
+          '<div ng-include="' + "'" + '$$$modalContentUrl$$$' + "'"  + '">' +
+            '<!-- Modal content -->' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+    // ------------------------------------
+    // ---- CONFIGURATION VALUES STARTS for wnp-pop directive ---
+    // ------------------------------------
+    /**
+     * --- YOU COULD DEFINE YOUR 'modalElement' here --
+     *     Make sure that your Modal element has two place holder inside 
+     *     Those are : $$$modalName$$$  and  $$$modalContentUrl$$$ 
+     *     In the right place, see an example above ---
+     */
+    /** 
+     * --This object contains all the defined elements 
+     *   YOU CAN ADD YOURS
+    */
+    var preModal = {};
+    /**
+     * Add the default Modal Element parameters.
+     */
+     preModal.wnpPopDefault = {
+      url        : 'views/sampleOne.html',  // -- PROBABLY YOU WANT THIS TO BE DIFFERENT --
+      element : largeModalElement
+     };
+     preModal.small = {
+      url     : null,
+      element : smallModalElement
+     };
+     preModal.large = {
+      url     : null,
+      element : largeModalElement
+     };
+     preModal.yourModal = {
+      url     :  'put yours here',
+      element : 'Put yours here'
+     };
+    // ---- You can modify above --------
+    // ---- CONFIGURATION VALUES ENDS ---
+    // ----------------------------------
+    // === DO NOT Modify After this ONLY in the next provider for Modal Windows---
+    /**
+     * --- This will return the Pre defined Modal Element based on wnpPopName ---
+     */
+    config.getPreModalElement = function(wnpPopName) {
+      var ret;
+      var mod = preModal[wnpPopName];
+      if ( mod ) {
+        ret = mod.element;
+      }
+      return ret;
+    };
+    /**
+     * --- This will return the Pre defined Modal URL based on wnpPopName ---
+     */
+    config.getPreModalUrl = function(wnpPopName) {
+      var ret;
+      var mod = preModal[wnpPopName];
+      if ( mod ) {
+        ret = mod.url;
+      }
+      return ret;
+    };
+    /**
+     * --- This will return the DEFAULT Modal Element ---
+     */
+    config.getDefaultModalElement = function() {
+      return this.getPreModalElement('wnpPopDefault');
+    };
+    /**
+     * --- This will return the DEFAULT Modal URL ---
+     */
+    config.getDefaultModalUrl = function() {
+      return this.getPreModalUrl('wnpPopDefault');
+    };
+    /**
+     * The provider method, needed for Providers.
+     */
+    config.$get = function() {
+      return this;
+    };
+    return config;
   });
