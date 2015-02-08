@@ -5,8 +5,9 @@ Windows Popup AngularJS Module
 
 If you want to contribute please clone the ['windowsPopup-dev' Development Environment](https://github.com/ervinn/windowsPopup-dev) and follow the instructions there.  Thanks. Any idea, comment, feedback will be appreciated. The [development repository](https://github.com/ervinn/windowsPopup-dev) contains a sample page to demonstrate the usage of 'windowsPopup' module, and it contains all the test code for it. >>Happy coding<<
 
+#####Latest stable version -> [beta v0.0.4 (Released on 2014-12-15) - download from here](https://github.com/ervinn/windowsPopup/tree/v0.0.4)  
 
-##### Version: v0.0.4 -- (Released on 2014-12-15) --
+##### Next Version: v0.0.5 -- (Released on NOT YET) --
 
 -----------------------------------------------------------------------------------------
 
@@ -49,11 +50,12 @@ Initially, this module just support child to parent data binding.
 
 [To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.4/).  
 
-In this first release, functionality is limited, but we plan to add more and more as we go along...
+...
 
-In this release we have :
-- ***wnp-popup*** : directive. Clicking this link will open the secondary window.
+We have the following main functionality directives, so far, we adding more as we go along ... :
+- ***wnp-popup*** : directive. Clicking this link will open the secondary window. Use the left click 
 - ***wnp-model*** : directive. Use this directive to link parent model to child model.- 
+- ***wnp-pop*** : directive. Use this directive to open Model window instead of browser window. Use the right click, "contextmenu" to open Modal.
 
 The ***wnp-popup*** directive has all the attributes that are needed to pass on to 'window.open()' method's parameters. Plus is has some additional attributes to configure ***wnp-popup*** directive.
 
