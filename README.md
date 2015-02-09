@@ -5,9 +5,8 @@ Windows Popup AngularJS Module
 
 If you want to contribute please clone the ['windowsPopup-dev' Development Environment](https://github.com/ervinn/windowsPopup-dev) and follow the instructions there.  Thanks. Any idea, comment, feedback will be appreciated. The [development repository](https://github.com/ervinn/windowsPopup-dev) contains a sample page to demonstrate the usage of 'windowsPopup' module, and it contains all the test code for it. >>Happy coding<<
 
-#####Latest stable version -> [beta v0.0.4 (Released on 2014-12-15) - download from here](https://github.com/ervinn/windowsPopup/tree/v0.0.4)  
+#####Version -> [v0.0.5 (Released on 2015-02-08) - download from here](https://github.com/ervinn/windowsPopup/tree/v0.0.5)  
 
-##### Next Version: v0.0.5 -- (Released on NOT YET) --
 
 -----------------------------------------------------------------------------------------
 
@@ -31,8 +30,8 @@ You should not modify **'windowsPopup.js'**.
 ###### Download :
 You can download the two needed .js files form Github. Search for windowsPopup reposatory.
 Or for testing you can point to the two links below:
-- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.4/windowsPopup.js>
-- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.4/windowsPopupConfig.js>
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.5/windowsPopup.js>
+- <http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.5/windowsPopupConfig.js>
 
 _NOTE_: do not use the above two links in production applications, the availability and performance of that server is not guaranteed. 
 
@@ -48,7 +47,7 @@ But, all those details are hiden in this module, so hopefully you wont need to w
 This **windowsPopup** module tries to help AngularJS developers to open secondary windows and communicate between, them. 
 Initially, this module just support child to parent data binding. 
 
-[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.4/).  
+[To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.5/).  
 
 ...
 
@@ -89,6 +88,13 @@ Feel free to modify any of the values. Modify only the values. If you are a java
 Also feel free to define additional pre-defined windows. All predefined windows mus be added to the ``` var preWindows = {}; ``` object. _NOTE_: the key in the JavaScript object is the window name, that is the name attribute you specify in the ```<wnp-popup name="..." /> ``` directives, to refernce the values.
 
 _NOTE_: other additional config values that will be added in the future will follow these three level logic configuration.
+
+-----
+#####New in v0.0.5 :
+- Add more unit and E2E test cases for the new `wnp-pop`, directive.
+- Add more help description for how to use the `wnp-pop` directive (add a "Modal usega Help" modal window).
+- Fix some text spelling mistakes on the Demo window.
+- BUG Fix : make sure only one Modal DOM element is added to the page, for each URL and name.
 
 -----
 #####New in v0.0.4 :
