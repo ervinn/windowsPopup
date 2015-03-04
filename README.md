@@ -55,7 +55,7 @@ Initially, this module just support child to parent data binding.
 We have the following main functionality directives, so far, we adding more as we go along ... :
 - ***wnp-popup*** : directive. Clicking this link will open the secondary window. Use the left click 
 - ***wnp-model*** : directive. Use this directive to link parent model to child model.- 
-- ***wnp-pop*** : directive. Use this directive to open Model window instead of browser window. Use the right click, "contextmenu" to open Modal.
+- ***wnp-pop*** : directive. Use this directive to open Model window instead of browser window. The default is to use the right click, "contextmenu" to open Modal. The default can be overwritten by adding ''wnp-left-click'' or ''wnp-dbl-click'' attributes.
 
 The ***wnp-popup*** directive has all the attributes that are needed to pass on to 'window.open()' method's parameters. Plus is has some additional attributes to configure ***wnp-popup*** directive.
 
