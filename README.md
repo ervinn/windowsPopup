@@ -51,6 +51,8 @@ Initially, this module just support child to parent data binding.
 [To see a demo, you can click on this](http://www.hardcomsoft.com/ervin/angularJS/windowsPopup/v0.0.5/).  
 
 ...
+[To see some videos ] (http://www.hardcomsoft.com//ervin/angularJS/windowsPopup/docs/videos.html)
+...
 
 We have the following main functionality directives, so far, we adding more as we go along ... :
 - ***wnp-popup*** : directive. Clicking this link will open the secondary window. Use the left click 
